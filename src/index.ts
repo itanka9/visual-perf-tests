@@ -85,5 +85,6 @@ const ui = new dat.GUI({ width: 300 });
 
 ui.add(params, 'reference');
 ui.add(params, 'target');
+ui.add(params, 'styleId');
 
 createUI(ui.addFolder('Cases'));
