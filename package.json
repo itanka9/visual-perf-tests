@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html && parcel build --target=node src/runner.ts",
+    "build": "parcel build --public-url https://itanka9.github.io/visual-perf-tests/ ./src/index.html  && parcel build --target=node src/runner.ts",
     "test": "npm run build && node dist/runner.js"
   },
   "keywords": [],
