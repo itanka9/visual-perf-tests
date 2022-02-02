@@ -7678,7 +7678,7 @@ function getCoords(map) {
 exports.getCoords = getCoords;
 
 function generateTile(map, coords) {
-  var source = map.modules.tileManager.regionalTileLayer.sourceCore;
+  var source = map.modules.tileManager.tileLayers[0].sourceCore;
   return source.generateTile(map.state, coords, [], 2, {});
 }
 
@@ -11408,6 +11408,11 @@ var dat = __importStar(require("dat.gui"));
 var scenarios_1 = require("./tests/render/scenarios");
 
 exports.runnerAddr = "http://" + config_1.runner.hostname + ":" + config_1.runner.port;
+var params = {
+  reference: 'https://mapgl.2gis.com/api/js',
+  target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
+  styleId: 'c080bb6a-8134-4993-93a1-5b4d8c36a59b'
+};
 
 var log = function log(msg) {
   return __awaiter(void 0, void 0, void 0, function () {
@@ -11453,6 +11458,7 @@ function performTest(mapUrl, test) {
         key: '042b5b75-f847-4f2a-b695-b5f58adc9dfd',
         zoomControl: 'bottomRight',
         center: [82.897904, 54.98318],
+        style: params.styleId,
         zoom: 16
       });
       map.once('idle', function () {
@@ -11489,27 +11495,22 @@ function performTest(mapUrl, test) {
   });
 }
 
-var origins = {
-  reference: 'https://mapgl.2gis.com/api/js',
-  target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js'
-};
-
 function performComparingTest(test) {
   return __awaiter(this, void 0, void 0, function () {
-    var referenceResults, targetResults, _a, _b, _i, indicator, producationStats, targetStats, _c, _d, _e, percentile, delta;
+    var referenceResults, targetResults, _a, _b, _i, indicator, referenceStats, targetStats, _c, _d, _e, percentile, delta;
 
     return __generator(this, function (_f) {
       switch (_f.label) {
         case 0:
           return [4
           /*yield*/
-          , performTest(origins.reference, test)];
+          , performTest(params.reference, test)];
 
         case 1:
           referenceResults = _f.sent();
           return [4
           /*yield*/
-          , performTest(origins.target, test)];
+          , performTest(params.target, test)];
 
         case 2:
           targetResults = _f.sent();
@@ -11527,7 +11528,7 @@ function performComparingTest(test) {
           /*break*/
           , 9];
           indicator = _a[_i];
-          producationStats = referenceResults[indicator];
+          referenceStats = referenceResults[indicator];
           targetStats = targetResults[indicator];
           return [4
           /*yield*/
@@ -11538,7 +11539,7 @@ function performComparingTest(test) {
 
           _c = [];
 
-          for (_d in producationStats) {
+          for (_d in referenceStats) {
             _c.push(_d);
           }
 
@@ -11550,7 +11551,7 @@ function performComparingTest(test) {
           /*break*/
           , 8];
           percentile = _c[_e];
-          delta = (targetStats[percentile] - producationStats[percentile]).toFixed(2);
+          delta = (targetStats[percentile] - referenceStats[percentile]).toFixed(2);
 
           if (delta[0] !== '-') {
             delta = "+" + delta;
@@ -11558,7 +11559,7 @@ function performComparingTest(test) {
 
           return [4
           /*yield*/
-          , log("  " + percentile + " " + delta + " (" + targetStats[percentile] + "/" + producationStats[percentile] + ")")];
+          , log("  " + percentile + " " + delta + " (" + targetStats[percentile] + "/" + referenceStats[percentile] + ")")];
 
         case 6:
           _f.sent();
@@ -11615,8 +11616,9 @@ function performComparingTest(test) {
 var ui = new dat.GUI({
   width: 300
 });
-ui.add(origins, 'reference');
-ui.add(origins, 'target');
+ui.add(params, 'reference');
+ui.add(params, 'target');
+ui.add(params, 'styleId');
 (0, describe_it_browser_1.createUI)(ui.addFolder('Cases'));
 },{"./loader":"loader.ts","./config":"config.ts","./tests/render":"tests/render/index.ts","./tests/labeling":"tests/labeling.ts","./tests/parser":"tests/parser.ts","describe-it-browser":"../node_modules/describe-it-browser/dist/lib.js","dat.gui":"../node_modules/dat.gui/build/dat.gui.module.js","./tests/render/scenarios":"tests/render/scenarios.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -11646,7 +11648,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59796" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56918" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,7 +1,6 @@
-import { Map as JMap, TileCoords } from '@webmaps/jakarta';
+import { Map as JMap } from '@webmaps/jakarta';
 import { labeling } from '@webmaps/jakarta/dist/es6/config';
 import { createTileInfo } from '@webmaps/jakarta/dist/es6/utils/tiles';
-import { LabelSource } from '@webmaps/jakarta/dist/es6/types/labeling';
 import { keyedStats } from '../stats';
 import { generateTile, getCoords, now } from '../utils';
 
@@ -64,7 +63,6 @@ export async function measureLabeling (map: JMap) {
         }
         results.processLabels.push(now() - start);
 
-
         start = now();
         for (const coord of coords) {
             const lr = await (map.modules.labeler as any).worker.processLabels(
@@ -87,7 +85,6 @@ export async function measureLabeling (map: JMap) {
             if (index !== -1) {
                 labeler.activeLabelKeys.splice(index, 1);
             }
-            // map.state.needLabeling = true;
         }
         results.removeLabels.push(now() - start);
     }
