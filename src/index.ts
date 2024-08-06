@@ -11,8 +11,8 @@ import { cases } from './tests/render/scenarios';
 export const runnerAddr = `http://${runner.hostname}:${runner.port}`
 
 const params = {
-    reference: '/index.js',
-    //reference: 'https://mapgl.2gis.com/api/js/v1',
+    //reference: '/index.js',
+    reference: 'https://mapgl.2gis.com/api/js/v1',
     target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
 
     // styleId: 'b2b8046f-9bb0-469a-9860-9847032935cc',
