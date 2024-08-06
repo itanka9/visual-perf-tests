@@ -3,7 +3,7 @@ import { runTest, cases } from './scenarios';
 import { keyedStats } from '../../stats';
 
 export async function measureRender (map: JMap, scenario: keyof typeof cases) {
-    const ITERATIONS = 4;
+    const ITERATIONS = 3;
     const results = {
         tileCount: [],
         dynamicTileCount: [],
@@ -23,11 +23,13 @@ export async function measureRender (map: JMap, scenario: keyof typeof cases) {
         results.dynamicTileCount.push(stats.dynamicTileCount);
         results.tileCount.push(stats.tileCount);
         results.vertexCount.push(stats.vertexCount);
+        console.log(`tilesCount: ${stats.tileCount}, vertexCount: ${(stats.vertexCount / 10**6).toFixed(2)}M, drawCount: ${stats.drawCount}, tileObjects: ${map.modules.tileManager.getTileObjects().length}, models: ${Object.keys(map.modules.assetManager.models).length}`);    
     })
     for (let i = 0; i < ITERATIONS; i++) {
-        if (i > 0) {
-            map.state.collectStats = true;
-        }
+        map.state.collectStats = true;
+        // if (i > 0) {
+        //     map.state.collectStats = true;
+        // }
         await runTest(scenario, map)
     }
     map.state.collectStats = oldCollectStats;
