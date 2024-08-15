@@ -1,3 +1,3 @@
 export default {
-    base: '/tinycss/'
+    base: '/visual-perf-tests/'
 }
