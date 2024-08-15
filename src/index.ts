@@ -8,22 +8,29 @@ import { cases } from './tests/render/scenarios';
 
 export const runnerAddr = `http://${runner.hostname}:${runner.port}`
 
-const styles = [
-    'b2b8046f-9bb0-469a-9860-9847032935cc',
-    'eb10e2c3-3c28-4b81-b74b-859c9c4cf47e',
-    'c080bb6a-8134-4993-93a1-5b4d8c36a59b',
-    '8e055b04-e7b5-42a5-95e2-a0b5190a034e',
-    '9c73b6cf-5d37-44a2-9a3e-68737b72d9a4',
-    '9451a385-750a-4f28-ac7a-ddc7922db9b6'
-]
+const styles = {
+    'A': 'b2b8046f-9bb0-469a-9860-9847032935cc',
+    'Online': 'eb10e2c3-3c28-4b81-b74b-859c9c4cf47e',
+    'SDK': 'c080bb6a-8134-4993-93a1-5b4d8c36a59b',
+    'Immersive': '8e055b04-e7b5-42a5-95e2-a0b5190a034e',
+//    'Immersive': '9c73b6cf-5d37-44a2-9a3e-68737b72d9a4',
+    'Immersive Light': '9451a385-750a-4f28-ac7a-ddc7922db9b6'
+}
+
+const references = {
+    'production': 'https://mapgl.2gis.com/api/js/v1',
+    'staging': 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
+    test: '/visual-perf-tests/index.js'
+}
+
 
 const params = {
-    // reference: '/index.js',
+    reference: '/visual-perf-tests/index.js',
     // reference: 'http://192.168.1.179:3000/index.js',
-    reference: 'https://mapgl.2gis.com/api/js/v1',
+    // reference: 'https://mapgl.2gis.com/api/js/v1',
     target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
 
-    styleId: '8e055b04-e7b5-42a5-95e2-a0b5190a034e'
+    styleId: '9451a385-750a-4f28-ac7a-ddc7922db9b6'
 }
 
 const log = async (msg: any) => console.log(msg) /* fetch(`${runnerAddr}/log/`, {
@@ -88,16 +95,20 @@ async function performComparingTest (test: TestFunction) {
     await finish(true);
 }
 
+const ui = new dat.GUI({ width: 330 });
+
 describe('Rendering', () => {
     for (let perfCase in cases) {
-        it(perfCase, () => performTest(params.reference, map => measureRender(map, perfCase as any))) 
+        it(perfCase, () => {
+            performTest(params.reference, map => measureRender(map, perfCase as any));
+            ui.close();
+        });
         // it(prefCase, () => performComparingTest(map => measureRender(map, prefCase as any)))
     }
 });
 
-const ui = new dat.GUI({ width: 300 });
 
-ui.add(params, 'reference');
+ui.add(params, 'reference', references);
 // ui.add(params, 'target');
 ui.add(params, 'styleId', styles);
 
