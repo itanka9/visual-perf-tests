@@ -2,8 +2,6 @@ import { load } from './loader';
 import { Map } from '@2gis/mapgl/types';
 import { runner } from './config';
 import { measureRender } from './tests/render';
-import { measureLabeling } from './tests/labeling';
-import { measureParser } from './tests/parser';
 import { describe, it, createUI } from 'describe-it-browser/src/lib';
 import * as dat from 'dat.gui';
 import { cases } from './tests/render/scenarios';
@@ -89,10 +87,6 @@ async function performComparingTest (test: TestFunction) {
     }
     await finish(true);
 }
-
-// it('Parser', () => performComparingTest(measureParser));
-
-// it('Labeling', () => performComparingTest(measureLabeling));
 
 describe('Rendering', () => {
     for (let perfCase in cases) {

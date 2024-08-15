@@ -1,4 +1,6 @@
-import { Map as JMap, TileCoords } from '@webmaps/jakarta';
+
+type JMap = any;
+type TileCoords = number[];
 
 export const now = () => performance.now();
 
