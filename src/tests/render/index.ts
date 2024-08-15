@@ -1,10 +1,11 @@
-import { Map as JMap } from '@webmaps/jakarta';
 import { runTest, cases } from './scenarios';
 import { keyedStats } from '../../stats';
 
+type JMap = any;
+
 export async function measureRender (map: JMap, scenario: keyof typeof cases) {
-    const ITERATIONS = 4;
-    const results = {
+    const ITERATIONS = 3;
+    const results: any = {
         tileCount: [],
         dynamicTileCount: [],
         drawCount: [],
@@ -17,7 +18,7 @@ export async function measureRender (map: JMap, scenario: keyof typeof cases) {
         frameStart = performance.now();
     })
     map.on('frameend', () => {
-        const stats = map.state.stats;
+        const stats = map.state.stats as any;
         results.fps.push(Math.min(200, 1000 / (performance.now() - frameStart)));
         results.drawCount.push(stats.drawCount);
         results.dynamicTileCount.push(stats.dynamicTileCount);
@@ -25,9 +26,7 @@ export async function measureRender (map: JMap, scenario: keyof typeof cases) {
         results.vertexCount.push(stats.vertexCount);
     })
     for (let i = 0; i < ITERATIONS; i++) {
-        if (i > 0) {
-            map.state.collectStats = true;
-        }
+        map.state.collectStats = true;
         await runTest(scenario, map)
     }
     map.state.collectStats = oldCollectStats;
