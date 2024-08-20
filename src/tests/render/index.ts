@@ -1,9 +1,9 @@
-import { runTest, cases } from './scenarios';
+import { runScenario, scenarios } from './scenarios';
 import { keyedStats } from '../../stats';
 
 type JMap = any;
 
-export async function measureRender (map: JMap, scenario: keyof typeof cases) {
+export async function measureRender (map: JMap, scenario: keyof typeof scenarios) {
     const ITERATIONS = 3;
     const results: any = {
         tileCount: [],
@@ -27,7 +27,7 @@ export async function measureRender (map: JMap, scenario: keyof typeof cases) {
     })
     for (let i = 0; i < ITERATIONS; i++) {
         map.state.collectStats = true;
-        await runTest(scenario, map)
+        await runScenario(map, scenario)
     }
     map.state.collectStats = oldCollectStats;
     return keyedStats(results);

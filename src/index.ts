@@ -4,7 +4,7 @@ import { runner } from './config';
 import { measureRender } from './tests/render';
 import { describe, it, createUI } from 'describe-it-browser/src/lib';
 import * as dat from 'dat.gui';
-import { cases } from './tests/render/scenarios';
+import { scenarios } from './tests/render/scenarios';
 
 export const runnerAddr = `http://${runner.hostname}:${runner.port}`
 
@@ -30,7 +30,7 @@ const params = {
     // reference: 'https://mapgl.2gis.com/api/js/v1',
     target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
 
-    styleId: '9451a385-750a-4f28-ac7a-ddc7922db9b6'
+    styleId: '8e055b04-e7b5-42a5-95e2-a0b5190a034e'
 }
 
 const log = async (msg: any) => console.log(msg) /* fetch(`${runnerAddr}/log/`, {
@@ -61,18 +61,14 @@ function performTest(mapUrl: string, test: TestFunction) {
                 styleState: {
                     immersiveRoadsOn: true
                 },
-                // @ts-ignore
-                disableAntiAliasing: true,
                 zoom: 16
             });
             // map.once('styleload', () => {
             //     (map as any).hideLayers({ type: 'gltfModel' });
             // })
-            map.once('idle', async () => {
-                const jmap = (map as any)._impl;
-                await log('Testing ' + (mapUrl || 'production'))
-                resolve(await test(jmap));
-            })
+            const jmap = (map as any)._impl;
+            log('Testing ' + (mapUrl || 'production'));
+            test(jmap).then(resolve);
         });    
     })
 }
@@ -98,7 +94,7 @@ async function performComparingTest (test: TestFunction) {
 const ui = new dat.GUI({ width: 330 });
 
 describe('Rendering', () => {
-    for (let perfCase in cases) {
+    for (let perfCase in scenarios) {
         it(perfCase, () => {
             performTest(params.reference, map => measureRender(map, perfCase as any));
             ui.close();
