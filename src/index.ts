@@ -20,7 +20,9 @@ const styles = {
 const references = {
     'production': 'https://mapgl.2gis.com/api/js/v1',
     'staging': 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
-    test: '/visual-perf-tests/index.js'
+    'throttle': 'https://jakarta-throttled-clear-not-debounced.web-staging.2gis.ru/index.js',
+    'mem-paranoid': '/visual-perf-tests/mem-paranoid.js',
+    'mem-throttle': '/visual-perf-tests/mem-throttle.js',
 }
 
 
@@ -29,6 +31,10 @@ const params = {
     // reference: 'http://192.168.1.179:3000/index.js',
     // reference: 'https://mapgl.2gis.com/api/js/v1',
     target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
+
+    iterations: 1,
+
+    warmup: false,
 
     styleId: '8e055b04-e7b5-42a5-95e2-a0b5190a034e'
 }
@@ -92,11 +98,51 @@ async function performComparingTest (test: TestFunction) {
 }
 
 const ui = new dat.GUI({ width: 330 });
+const resultsEl = document.querySelector<HTMLElement>('#results');
 
 describe('Rendering', () => {
     for (let perfCase in scenarios) {
         it(perfCase, () => {
-            performTest(params.reference, map => measureRender(map, perfCase as any));
+            performTest(params.reference, map => measureRender(map, perfCase as any, params.iterations, params.warmup))
+                .then((results: any) => {
+                    let name = params.reference;
+                    for (const rname in references) {
+                        if (references[rname] === params.reference) {
+                            name = rname;
+                        }
+                    }
+                    let styleName = params.styleId;
+                    for (const sname in styles) {
+                        if (styles[sname] === params.styleId) {
+                            styleName = sname;
+                        }
+                    }
+                    const output = [
+                        `<b>${name} - ${styleName}</b>(iterations: ${params.iterations}${params.warmup ? ' + warmup' : ''})<br /><br />`
+                    ];
+                    for (const metric in results) {
+                        output.push(`<b>${metric}</b>`);
+                        const stats = results[metric];
+                        if (typeof stats === 'number') {
+                            output.push(': ' + stats + '<br />');
+                            continue;
+                        }
+                        output.push('<table>');
+                        output.push('<tr>');
+                        for (const q in stats) {
+                            output.push(`<td>${q}</td>`);
+                        }
+                        output.push('</tr>');
+                        output.push('<tr>');
+                        for (const q in stats) {
+                            output.push(`<td>${stats[q]}</td>`);
+                        }
+                        output.push('</tr>');
+                        output.push('</table>');
+                    }
+                    resultsEl.innerHTML = output.join('');
+                    resultsEl.style.display = 'block';
+                });
             ui.close();
         });
         // it(prefCase, () => performComparingTest(map => measureRender(map, prefCase as any)))
@@ -107,5 +153,7 @@ describe('Rendering', () => {
 ui.add(params, 'reference', references);
 // ui.add(params, 'target');
 ui.add(params, 'styleId', styles);
+ui.add(params, 'iterations');
+ui.add(params, 'warmup');
 
 createUI(ui);

@@ -14,8 +14,7 @@ const std = (arr) => {
     return Math.sqrt(sum(diffArr) / (arr.length - 1));
 };
 
-const quantile = (arr, q) => {
-    const sorted = asc(arr);
+const quantile = (sorted, q) => {
     const pos = (sorted.length - 1) * q;
     const base = Math.floor(pos);
     const rest = pos - base;
@@ -26,17 +25,16 @@ const quantile = (arr, q) => {
     }
 };
 
-const fmt = n => Number(n.toFixed(2))
+const fmt = n => Number(n).toFixed(2)
 
-export function stats (input: number[]) {
-    return {
-        q25: fmt(quantile(input, .25)),
-        median: fmt(quantile(input, .50)),
-        q75: fmt(quantile(input, .75)),
-        q90: fmt(quantile(input, .90)),
-        q95: fmt(quantile(input, .95)),
-        q99: fmt(quantile(input, .99)),
+export function stats (input: number[], percentiles = [.25, .5, .75, .90, .95, .99]) {
+    asc(input);
+    const output = {};
+    for (const p of percentiles) {
+        output[`q${Math.trunc(p * 100)}`] = fmt(quantile(input, p));
     }
+
+    return output;
 }
 
 export function keyedStats (input: { [name: string]: number[] }) {

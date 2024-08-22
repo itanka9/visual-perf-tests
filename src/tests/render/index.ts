@@ -1,16 +1,19 @@
 import { runScenario, scenarios } from './scenarios';
-import { keyedStats } from '../../stats';
+import { keyedStats, stats } from '../../stats';
 
 type JMap = any;
 
-export async function measureRender (map: JMap, scenario: keyof typeof scenarios) {
-    const ITERATIONS = 3;
+const BAD_FPS_THRESHOLD = 20;
+
+export async function measureRender (map: JMap, scenario: keyof typeof scenarios, iterations: number, warmup: boolean) {
+    const ITERATIONS = iterations + (warmup ? 1 : 0);
     const results: any = {
-        tileCount: [],
-        dynamicTileCount: [],
-        drawCount: [],
-        vertexCount: [],
+        tiles: [],
+        draws: [],
+        vertices: [],
         fps: [],
+        badfps: [],
+        models: []
     }
     const oldCollectStats = map.state.collectStats;
     let frameStart = NaN;
@@ -19,16 +22,32 @@ export async function measureRender (map: JMap, scenario: keyof typeof scenarios
     })
     map.on('frameend', () => {
         const stats = map.state.stats as any;
-        results.fps.push(Math.min(200, 1000 / (performance.now() - frameStart)));
-        results.drawCount.push(stats.drawCount);
-        results.dynamicTileCount.push(stats.dynamicTileCount);
-        results.tileCount.push(stats.tileCount);
-        results.vertexCount.push(stats.vertexCount);
+        const fps = 1000 / (performance.now() - frameStart);
+        if (fps <= BAD_FPS_THRESHOLD) {
+            results.badfps.push(fps)
+        }
+        if (stats.drawCount > 0) {
+            results.fps.push(fps);
+        }
+        results.draws.push(stats.drawCount);
+        results.tiles.push(stats.tileCount);
+        results.vertices.push(stats.vertexCount / 10**6);
+        results.models.push(Object.keys(map.modules.assetManager.models).length);
     })
     for (let i = 0; i < ITERATIONS; i++) {
-        map.state.collectStats = true;
+        if (!warmup || i > 0) {
+            map.state.collectStats = true;
+        }
         await runScenario(map, scenario)
     }
     map.state.collectStats = oldCollectStats;
-    return keyedStats(results);
+    return {
+        fps: stats(results.fps, [.01, .05, .1, .25, .5, .75]),
+        badfps: stats(results.badfps, [.01, .05, .1, .25, .5, .75]),
+        gliches: results.badfps.length,
+        draws: stats(results.draws),
+        tiles: stats(results.tiles),
+        vertices: stats(results.vertices),
+        models: stats(results.models)
+    };
 }

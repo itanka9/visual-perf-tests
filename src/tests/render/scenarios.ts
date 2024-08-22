@@ -70,6 +70,29 @@ export async function runScenario(map: Map, name: string) {
   }
 }
 
+const easy = [
+  // москва дефолт
+  [
+    { center: [37.62017, 55.753466], duration: 7, easing: 'easeInOutQuad' },
+    { zoom: 11, pitch: 0, rotation: 0, duration: 7, easing: 'easeOutCubic' },
+  ],
+  // вднх вход
+  [
+      { center: [37.637587, 55.826326], duration: 80, easing: 'easeInOutQuad' },
+      { zoom: 18.89, pitch: 44.13, rotation: 34.85, duration: 110, easing: 'easeInOutCubic' },
+  ],
+  // вднх отзум
+  [
+      { center: [37.630834, 55.830619], duration: 70, easing: 'easeInOutQuad' },
+      { zoom: 16.39, pitch: 45, rotation: 174.95, duration: 80, easing: 'easeInOutCubic' },
+  ],
+].reduce((res, scenario) => {
+  scenario.forEach((viewRequest) =>
+      res.push({ ...viewRequest, duration: viewRequest.duration * 100 }),
+  );
+  return res;
+}, []);
+
 const moscow = [
   // москва дефолт
   [
@@ -163,4 +186,4 @@ const moscow = [
   return res;
 }, []);
 
-export const scenarios = { moscow }
+export const scenarios = { easy, moscow }
