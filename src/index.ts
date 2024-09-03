@@ -14,7 +14,7 @@ const styles = {
     'SDK': 'c080bb6a-8134-4993-93a1-5b4d8c36a59b',
     'Immersive': '8e055b04-e7b5-42a5-95e2-a0b5190a034e',
 //    'Immersive': '9c73b6cf-5d37-44a2-9a3e-68737b72d9a4',
-    'Immersive Light': '9451a385-750a-4f28-ac7a-ddc7922db9b6'
+    'Immersive Light': 'ffaaf4c3-4b23-45c8-b816-4f719a3170a9'
 }
 
 const references = {
@@ -23,20 +23,18 @@ const references = {
     'throttle': 'https://jakarta-throttled-clear-not-debounced.web-staging.2gis.ru/index.js',
     'mem-paranoid': '/visual-perf-tests/mem-paranoid.js',
     'mem-throttle': '/visual-perf-tests/mem-throttle.js',
+    'animation': '/visual-perf-tests/animation.js'
 }
 
+const graphicsPresets = ['light', 'normal', 'immersive'];
 
 const params = {
-    reference: '/visual-perf-tests/index.js',
-    // reference: 'http://192.168.1.179:3000/index.js',
-    // reference: 'https://mapgl.2gis.com/api/js/v1',
+    reference: '/visual-perf-tests/mem-throttle.js',
     target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
-
     iterations: 1,
-
     warmup: false,
-
-    styleId: '8e055b04-e7b5-42a5-95e2-a0b5190a034e'
+    graphicsPreset: 'immersive',
+    styleId: 'ffaaf4c3-4b23-45c8-b816-4f719a3170a9'
 }
 
 const log = async (msg: any) => console.log(msg) /* fetch(`${runnerAddr}/log/`, {
@@ -65,13 +63,11 @@ function performTest(mapUrl: string, test: TestFunction) {
                 center: [82.897904, 54.98318],
                 style: params.styleId,
                 styleState: {
-                    immersiveRoadsOn: true
+                    immersiveRoadsOn: true,
+                    graphicsPreset: params.graphicsPreset,
                 },
                 zoom: 16
             });
-            // map.once('styleload', () => {
-            //     (map as any).hideLayers({ type: 'gltfModel' });
-            // })
             const jmap = (map as any)._impl;
             log('Testing ' + (mapUrl || 'production'));
             test(jmap).then(resolve);
@@ -153,6 +149,7 @@ describe('Rendering', () => {
 ui.add(params, 'reference', references);
 // ui.add(params, 'target');
 ui.add(params, 'styleId', styles);
+ui.add(params, 'graphicsPreset', graphicsPresets);
 ui.add(params, 'iterations');
 ui.add(params, 'warmup');
 
