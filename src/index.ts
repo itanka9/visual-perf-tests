@@ -19,15 +19,15 @@ const styles = {
 
 const references = {
     'production': 'https://mapgl.2gis.com/api/js/v1',
-    'staging': 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
+    'staging': 'https://jakarta.web-staging.2gis.ru/index.js',
     'animation': '/visual-perf-tests/animation.js'
 }
 
 const graphicsPresets = ['light', 'normal', 'immersive'];
 
 const params = {
-    reference: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
-    target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
+    reference: 'https://jakarta.web-staging.2gis.ru/index.js',
+    target: 'https://jakarta.web-staging.2gis.ru/index.js',
     iterations: 1,
     warmup: false,
     graphicsPreset: 'immersive',
