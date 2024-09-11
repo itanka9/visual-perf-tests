@@ -26,7 +26,7 @@ const references = {
 const graphicsPresets = ['light', 'normal', 'immersive'];
 
 const params = {
-    reference: '/visual-perf-tests/mem-throttle.js',
+    reference: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
     target: 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
     iterations: 1,
     warmup: false,
