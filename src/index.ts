@@ -20,9 +20,6 @@ const styles = {
 const references = {
     'production': 'https://mapgl.2gis.com/api/js/v1',
     'staging': 'https://jakarta.web-staging.2gis.ru/sdk/index.js',
-    'throttle': 'https://jakarta-throttled-clear-not-debounced.web-staging.2gis.ru/index.js',
-    'mem-paranoid': '/visual-perf-tests/mem-paranoid.js',
-    'mem-throttle': '/visual-perf-tests/mem-throttle.js',
     'animation': '/visual-perf-tests/animation.js'
 }
 
@@ -34,7 +31,8 @@ const params = {
     iterations: 1,
     warmup: false,
     graphicsPreset: 'immersive',
-    styleId: 'ffaaf4c3-4b23-45c8-b816-4f719a3170a9'
+    immersiveRoads: true,
+    styleId: 'eb10e2c3-3c28-4b81-b74b-859c9c4cf47e'
 }
 
 const log = async (msg: any) => console.log(msg) /* fetch(`${runnerAddr}/log/`, {
@@ -63,7 +61,7 @@ function performTest(mapUrl: string, test: TestFunction) {
                 center: [82.897904, 54.98318],
                 style: params.styleId,
                 styleState: {
-                    immersiveRoadsOn: true,
+                    immersiveRoadsOn: params.immersiveRoads,
                     graphicsPreset: params.graphicsPreset,
                 },
                 zoom: 16
@@ -150,6 +148,7 @@ ui.add(params, 'reference', references);
 // ui.add(params, 'target');
 ui.add(params, 'styleId', styles);
 ui.add(params, 'graphicsPreset', graphicsPresets);
+ui.add(params, 'immersiveRoads');
 ui.add(params, 'iterations');
 ui.add(params, 'warmup');
 
