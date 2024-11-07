@@ -20,7 +20,7 @@ const styles = {
 const references = {
     'production': 'https://mapgl.2gis.com/api/js/v1',
     'staging': 'https://jakarta.web-staging.2gis.ru/index.js',
-    'animation': '/visual-perf-tests/animation.js'
+    'animation': '/visual-perf-tests/animation.js',
     'matrix': '/visual-perf-tests/matrix.js'
 }
 
