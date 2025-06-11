@@ -19,9 +19,7 @@ const styles = {
 
 const references = {
     'production': 'https://mapgl.2gis.com/api/js/v1',
-    'older': 'https://mapgl.2gis.com/api/js/v1.55.0',
     'staging': 'https://jakarta.web-staging.2gis.ru/index.js',
-    'instances': '/visual-perf-tests/instances.js',
     'tiles-update': '/visual-perf-tests/update.js',
 }
 
