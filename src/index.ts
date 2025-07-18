@@ -13,7 +13,7 @@ const styles = {
     'Online': 'eb10e2c3-3c28-4b81-b74b-859c9c4cf47e',
     'SDK': 'c080bb6a-8134-4993-93a1-5b4d8c36a59b',
     'Immersive': '8e055b04-e7b5-42a5-95e2-a0b5190a034e',
-//    'Immersive': '9c73b6cf-5d37-44a2-9a3e-68737b72d9a4',
+    //    'Immersive': '9c73b6cf-5d37-44a2-9a3e-68737b72d9a4',
     'Immersive Light': 'ffaaf4c3-4b23-45c8-b816-4f719a3170a9'
 }
 
@@ -27,6 +27,7 @@ const graphicsPresets = ['light', 'normal', 'immersive'];
 
 const params = {
     reference: 'https://jakarta.web-staging.2gis.ru/index.js',
+    customReference: '',
     target: 'https://jakarta.web-staging.2gis.ru/index.js',
     iterations: 1,
     warmup: false,
@@ -69,12 +70,12 @@ function performTest(mapUrl: string, test: TestFunction) {
             const jmap = (map as any)._impl;
             log('Testing ' + (mapUrl || 'production'));
             test(jmap).then(resolve);
-        });    
+        });
     })
 }
 
-async function performComparingTest (test: TestFunction) {
-    const referenceResults: any = await performTest(params.reference, test);
+async function performComparingTest(test: TestFunction) {
+    const referenceResults: any = await performTest(params.customReference !== '' ? params.customReference : params.reference, test);
     const targetResults: any = await performTest(params.target, test);
     for (const indicator in referenceResults) {
         const referenceStats = referenceResults[indicator]
@@ -86,7 +87,7 @@ async function performComparingTest (test: TestFunction) {
                 delta = `+${delta}`
             }
             await log(`  ${percentile} ${delta} (${targetStats[percentile]}/${referenceStats[percentile]})`);
-        }    
+        }
     }
     await finish(true);
 }
@@ -145,6 +146,7 @@ describe('Rendering', () => {
 
 
 ui.add(params, 'reference', references);
+ui.add(params, 'customReference');
 // ui.add(params, 'target');
 ui.add(params, 'styleId', styles);
 ui.add(params, 'graphicsPreset', graphicsPresets);
