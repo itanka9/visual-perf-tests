@@ -75,7 +75,7 @@ function performTest(mapUrl: string, test: TestFunction) {
 }
 
 async function performComparingTest(test: TestFunction) {
-    const referenceResults: any = await performTest(params.customReference !== '' ? `https://${params.customReference}.web-staging.2gis.ru/index.js` : params.reference, test);
+    const referenceResults: any = await performTest(params.customReference !== '' ? params.customReference : params.reference, test);
     const targetResults: any = await performTest(params.target, test);
     for (const indicator in referenceResults) {
         const referenceStats = referenceResults[indicator]
