@@ -98,7 +98,7 @@ const resultsEl = document.querySelector<HTMLElement>('#results');
 describe('Rendering', () => {
     for (let perfCase in scenarios) {
         it(perfCase, () => {
-            performTest(params.reference, map => measureRender(map, perfCase as any, params.iterations, params.warmup))
+            performTest(params.customReference !== '' ? params.customReference : params.reference, map => measureRender(map, perfCase as any, params.iterations, params.warmup))
                 .then((results: any) => {
                     let name = params.reference;
                     for (const rname in references) {
